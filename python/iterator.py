@@ -1,7 +1,7 @@
 import numpy as np
 import time as tm
-A = np.loadtxt('A_5_1.txt')
-b = np.loadtxt('b_5_1.txt')
+A = np.loadtxt('../data/A_5_1.txt')
+b = np.loadtxt('../data/b_5_1.txt')
 if b.ndim == 1:
     b = b.reshape(-1, 1)
 rows_A, cols_A = A.shape
@@ -32,9 +32,9 @@ for i in range(0, 1000):
     if err[0] < err[i-1]:
         raise ValueError("к сожалению, ошибка растёт, придется грустить")
 print(x)
-with open("output_err.txt", "w") as f:
+with open("../result/output_err_1_py.txt", "w") as f:
     # Записываем ошибки (через запятую)
     f.write(", ".join([f"{e: .18e}" for e in err]) + "\n")
-with open("output_time.txt", "w") as f:
+with open("../result/output_time_1_py.txt", "w") as f:
     # Записываем время (через запятую)
     f.write(", ".join([f"{t: .18e}" for t in time]) + "\n")
