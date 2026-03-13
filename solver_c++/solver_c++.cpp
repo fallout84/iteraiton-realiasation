@@ -6,7 +6,7 @@
 #include <cmath>
 #include <chrono>
 #include <iomanip>
-
+#include <clocale>
 using namespace std;
 
 // читаем матрицу из файла
@@ -45,10 +45,11 @@ double matrixNormInf(const vector<vector<double>>& A) {
 }
 
 int main() {
+    setlocale(LC_ALL, "Russian");
     auto A = loadMatrix("../data/A_5_1.txt");
     auto b = loadVector("../data/b_5_1.txt");
     int n = A.size();
-    if (n == 0 || A[0].size() != n || b.size() != n) {
+    if (A[0].size() != n || b.size() != n) {
         cerr << "Ошибка размерности!" << endl;
         return 1;
     }
@@ -69,9 +70,9 @@ int main() {
                 Ax_i += A[i][j] * x[j];
             }
             r[i] = b[i] - Ax_i;
-            r_norm += r[i] * r[i]; 
+            r_norm += r[i] * r[i];
         }
-        r_norm = sqrt(r_norm);     
+        r_norm = sqrt(r_norm);
         auto current_time = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed = current_time - start_time;
 
