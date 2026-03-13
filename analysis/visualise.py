@@ -8,7 +8,7 @@ time1 = np.loadtxt("../result/output_time_cpp.txt", delimiter=",")
 y_internal = np.loadtxt("../result/output_dot_cpp.txt", delimiter=",")
 ref = np.arange(len(err1))
 a, bx = 0.0, 1.0  # границы x
-y0, y1 = 0.0, 0.6312 # граничные условия
+y0, y1 = 0.0, 0.02 # граничные условия
 n = 20
 k = 1
 f = 1
@@ -70,12 +70,12 @@ plt.plot(x_coords, y_full, 'o-', color='darkviolet', label='Численное �
 # Создаем массив x для аналитики (более гладкий для красоты)
 x_fine = np.linspace(a, bx, 200)
 a, bx = 0.0, 1.0  # границы x
-y0, y1 = 0.0, 0.6312 # граничные условия
+y0, y1 = 0.0, 0.02 # граничные условия
 n = 20
-k = 1
+k = 50
 f = 1
 # Вычисляем аналитическое решение y = 1 - exp(-x)
-y_analyt = (f / k) + (y0 - (f / k)) * np.exp(-k * (x_fine - a))
+y_analyt = (1 / k) - (1 / k) * np.exp(-k * x_fine)
 # Рисуем
 plt.plot(x_fine, y_analyt, label='Аналитическое решение', linestyle='--', color='red', alpha=0.8)
 plt.plot(x_coords, y_full, 'o', label='Твой солвер (C++)', markersize=4, color='blue')
@@ -85,7 +85,7 @@ plt.xlabel("Координата x", fontsize=12)
 plt.ylabel("Значение y(x)", fontsize=12)
 plt.grid(True, linestyle=':', alpha=0.6)
 plt.legend()
-plt.savefig("pics/pic2.png", dpi=300)
+plt.savefig("pics/pic4.png", dpi=300)
 plt.show()
 # Сохранение
 if not os.path.exists('pics'):

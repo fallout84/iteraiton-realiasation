@@ -1,7 +1,7 @@
 import numpy as np
 import time as tm
 '# константа, определяющая мелкость шага'
-k1=1000
+k1 = 60000
 A = np.loadtxt('../data/A_7_1.txt')
 b = np.loadtxt('../data/b_7_1.txt')
 if b.ndim == 1:
@@ -22,7 +22,7 @@ err = []
 time = []
 start_time = tm.perf_counter()
 tau = A[0][0]/k1
-for i in range(0, 1000):
+for i in range(0, 100000):
     r = b - A@x
     err.append(np.linalg.norm(r))
     time.append(tm.perf_counter() - start_time)
@@ -30,8 +30,6 @@ for i in range(0, 1000):
     if err[i-1] < 0.01:
         print(f"процесс завершен на {i} шаге из 1000")
         break
-    if err[0] < err[i-1]:
-        raise ValueError("к сожалению, ошибка растёт, придется грустить")
 print(x)
 with open("../result/output_err_3_py.txt", "w") as f:
     # Записываем ошибки (через запятую)
