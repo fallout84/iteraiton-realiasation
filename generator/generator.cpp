@@ -1,20 +1,60 @@
-﻿// generator.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿#include <iostream>
+#include <vector>
+#include <fstream>
+#include <iomanip>
 
-#include <iostream>
+using namespace std;
 
-int main()
-{
-    std::cout << "Hello World!\n";
+int main() {
+    double k = 1.0, f = 1.0;
+    double a = 0.0, b_val = 1.0;
+    double y0 = 0.0, y1 = 1.0;
+    int n = 100;
+    cout << "k,f,a,b_val,y0,y1,n";
+    if (!(cin >> k >> f >> a >> b_val >> y0 >> y1 >> n)) {
+        cerr << "Input error. Exiting.\n";
+        return 1;
+    }
+
+    double h = (b_val - a) / (n + 1);
+    vector<vector<double>> A(n, vector<double>(n, 0.0));
+    vector<double> B(n, 2.0 * h * f);
+    for (int i = 0; i < n; ++i) {
+        A[i][i] = 2.0 * h * k;
+
+        if (i > 0) {
+            A[i][i - 1] = -1.0;
+        }
+        else {
+            B[i] += y0;
+        }
+
+        if (i < n - 1) {
+            A[i][i + 1] = 1.0;
+        }
+        else {
+            B[i] -= y1;
+        }
+    }
+    ofstream fileA("../data/A.txt");
+    ofstream fileB("../data/b.txt");
+
+    if (!fileA || !fileB) {
+        cerr << "Error opening files. Check if ../data/ directory exists.\n";
+        return 1;
+    }
+
+    fileA << scientific << setprecision(15);
+    fileB << scientific << setprecision(15);
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            fileA << A[i][j] << (j == n - 1 ? "" : " ");
+        }
+        fileA << "\n";
+        fileB << B[i] << "\n";
+    }
+
+    cout << "Files successfully generated.\n";
+    return 0;
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
