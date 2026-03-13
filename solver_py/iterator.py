@@ -1,5 +1,7 @@
 import numpy as np
 import time as tm
+'# константа, определяющая мелкость шага'
+k1=1000
 A = np.loadtxt('../data/A_7_1.txt')
 b = np.loadtxt('../data/b_7_1.txt')
 if b.ndim == 1:
@@ -19,8 +21,7 @@ r = 0
 err = []
 time = []
 start_time = tm.perf_counter()
-'# ии в код ревью просил использовать норму, чтоб обеспечить сходимость, взял норму Чебишева для матриц'
-tau = 1.0 / np.linalg.norm(A, ord=np.inf)
+tau = A[0][0]/k1
 for i in range(0, 1000):
     r = b - A@x
     err.append(np.linalg.norm(r))

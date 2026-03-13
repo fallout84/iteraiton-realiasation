@@ -8,6 +8,8 @@
 #include <iomanip>
 #include <clocale>
 using namespace std;
+// коэфф определяющий малость *шага*
+int k1 = 1000;
 
 // читаем матрицу из файла
 vector<vector<double>> loadMatrix(string path) {
@@ -33,21 +35,10 @@ vector<double> loadVector(string path) {
     return vec;
 }
 
-// норма чебишева
-double matrixNormInf(const vector<vector<double>>& A) {
-    double max_sum = 0;
-    for (const auto& row : A) {
-        double current_sum = 0;
-        for (double val : row) current_sum += abs(val);
-        if (current_sum > max_sum) max_sum = current_sum;
-    }
-    return max_sum;
-}
-
 int main() {
     setlocale(LC_ALL, "Russian");
-    auto A = loadMatrix("../data/A_5_1.txt");
-    auto b = loadVector("../data/b_5_1.txt");
+    auto A = loadMatrix("../data/A.txt");
+    auto b = loadVector("../data/b.txt");
     int n = A.size();
     if (A[0].size() != n || b.size() != n) {
         cerr << "Ошибка размерности!" << endl;
@@ -58,10 +49,10 @@ int main() {
     vector<double> err;
     vector<double> time_points;
 
-    double tau = 1.0 / matrixNormInf(A);
+    double tau = A[0][0]/k1;
     auto start_time = chrono::high_resolution_clock::now();
 
-    for (int k = 0; k < 1000; ++k) {
+    for (int k = 0; k < 5000000; ++k) {
         vector<double> r(n);
         double r_norm = 0;
         for (int i = 0; i < n; ++i) {
@@ -81,24 +72,20 @@ int main() {
         for (int i = 0; i < n; ++i) {
             x[i] += tau * r[i];
         }
-        if (r_norm < 0.01) {
-            cout << "Процесс завершен на " << k << " шаге" << endl;
-            break;
-        }
-        if (k > 0 && err[k] > err[0]) {
-            cerr << "Ошибка растёт, пора грустить." << endl;
-            return 1;
-        }
-    }
-    ofstream f_err("../result/output_err_1_cpp.txt");
-    ofstream f_time("../result/output_time_1_cpp.txt");
 
+    }
+    ofstream f_err("../result/output_err_cpp.txt");
+    ofstream f_time("../result/output_time_cpp.txt");
+    ofstream f_dot("../result/output_dot_cpp.txt");
     f_err << scientific << setprecision(18);
     f_time << scientific << setprecision(18);
 
     for (size_t i = 0; i < err.size(); ++i) {
         f_err << err[i] << (i == err.size() - 1 ? "" : ", ");
         f_time << time_points[i] << (i == time_points.size() - 1 ? "" : ", ");
+    }for (size_t i = 0; i < x.size(); ++i) {
+        f_dot << x[i] << (i == x.size() - 1 ? "" : ", ");
     }
+
     return 0;
 }
