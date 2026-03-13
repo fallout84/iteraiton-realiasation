@@ -70,7 +70,7 @@ int main() {
             cout << "закончили на " << k << endl;
             break;
         }
-        if (k % 1000 == 0) {
+        if (k % 100 == 0) {
             auto current_time = chrono::high_resolution_clock::now();
             chrono::duration<double> elapsed = current_time - start_time;
             err.push_back(r_norm);

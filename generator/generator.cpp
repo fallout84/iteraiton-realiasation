@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <cmath>
 #include <vector>
 #include <fstream>
 #include <iomanip>
@@ -6,12 +7,12 @@
 using namespace std;
 
 int main() {
-    double k = 1.0, f = 1.0;
+    double k = 50.0, f = 1.0;
     double a = 0.0, bx = 1.0;
-    double y0 = 0.0, y1 = 1.0;
+    double y0 = 0.0, y1 = 0.02;
     int n = 20;
-    cout << "k,f,a,bx,y0,y1,n";
-    if (!(cin >> k >> f >> a >> bx >> y0 >> y1 >> n)) {
+    cout << "k";
+    if (!(cin >> k )) {
         cerr << "Input error. Exiting.\n";
         return 1;
     }
