@@ -53,26 +53,32 @@ int main() {
     auto start_time = chrono::high_resolution_clock::now();
 
     for (int k = 0; k < 5000000; ++k) {
+        double r_norm_sq = 0;
         vector<double> r(n);
-        double r_norm = 0;
-        for (int i = 0; i < n; ++i) {
-            double Ax_i = 0;
-            for (int j = 0; j < n; ++j) {
-                Ax_i += A[i][j] * x[j];
-            }
-            r[i] = b[i] - Ax_i;
-            r_norm += r[i] * r[i];
-        }
-        r_norm = sqrt(r_norm);
-        auto current_time = chrono::high_resolution_clock::now();
-        chrono::duration<double> elapsed = current_time - start_time;
 
-        err.push_back(r_norm);
-        time_points.push_back(elapsed.count());
+        for (int i = 0; i < n; ++i) {
+            double Ax_i = A[i][i] * x[i];
+            if (i > 0)   Ax_i += A[i][i - 1] * x[i - 1];
+            if (i < n - 1) Ax_i += A[i][i + 1] * x[i + 1];
+            r[i] = b[i] - Ax_i;
+            r_norm_sq += r[i] * r[i];
+        }
+
+        double r_norm = sqrt(r_norm_sq);
+
+        if (r_norm < 1e-9) {
+            cout << "закончили на " << k << endl;
+            break;
+        }
+        if (k % 1000 == 0) {
+            auto current_time = chrono::high_resolution_clock::now();
+            chrono::duration<double> elapsed = current_time - start_time;
+            err.push_back(r_norm);
+            time_points.push_back(elapsed.count());
+        }
         for (int i = 0; i < n; ++i) {
             x[i] += tau * r[i];
         }
-
     }
     ofstream f_err("../result/output_err_cpp.txt");
     ofstream f_time("../result/output_time_cpp.txt");
